@@ -18,13 +18,15 @@ package ch.becompany;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.OutputStream;
 
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.fop.apps.FOUserAgent;
@@ -34,6 +36,8 @@ import org.apache.fop.apps.MimeConstants;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Goal which invokes Apache FOP.
@@ -59,7 +63,7 @@ public class FopMojo extends AbstractMojo {
     private File xslFile;
 
     /**
-     * Fileset of input files
+     * File set of input files.
      * @parameter
      * @required
      */
@@ -84,9 +88,6 @@ public class FopMojo extends AbstractMojo {
     private File userConfigFile;
 
     public void execute() throws MojoExecutionException {
-        /* log some parameters */
-        getLog().debug("xslFile=" + xslFile);
-        getLog().debug("outputDirectory=" + outputDirectory);
 
         if (this.userConfigFile != null) {
             try {
@@ -103,9 +104,9 @@ public class FopMojo extends AbstractMojo {
 
         /* iterate over input files */
         inputFiles.scan();
-        for (String filename : inputFiles.getIncludedFiles()) {
+        for (final String filename : inputFiles.getIncludedFiles()) {
             getLog().debug(
-                    "processing " + new File(inputFiles.getBasedir(), filename).getAbsolutePath());
+                    "Processing " + new File(inputFiles.getBasedir(), filename).getAbsolutePath());
             try {
                 processInputFile(filename);
             } catch (Exception e) {
@@ -116,9 +117,8 @@ public class FopMojo extends AbstractMojo {
 
     /**
      * Processes a single input file.
-     * 
      */
-    private void processInputFile(String filename) throws Exception {
+    protected void processInputFile(String filename) throws Exception {
         final FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
         if (this.baseUrl != null) {
             foUserAgent.setBaseURL(this.baseUrl);
@@ -127,20 +127,23 @@ public class FopMojo extends AbstractMojo {
             foUserAgent.setTargetResolution(this.targetResolution);
         }
 
-        final File outputFile = new File(outputDirectory, getRelativeOutputFilename(filename));
+        final File outputFile = new File(outputDirectory, getOutputFilename(filename));
         if (outputFile.createNewFile()) {
-            getLog().debug("output file created: " + outputFile);
+            getLog().debug("Output file created: " + outputFile);
         }
         final OutputStream out = new BufferedOutputStream(new java.io.FileOutputStream(outputFile));
 
         try {
             final Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+            final SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setNamespaceAware(true);
+            spf.setXIncludeAware(true);
+            final XMLReader xr = spf.newSAXParser().getXMLReader();
+            final File inputFile = new File(inputFiles.getBasedir(), filename);
+            final SAXSource src = new SAXSource(xr, new InputSource(new FileReader(inputFile)));
 
             final TransformerFactory factory = TransformerFactory.newInstance();
             final Transformer transformer = factory.newTransformer(new StreamSource(xslFile));
-
-            final File inputFile = new File(inputFiles.getBasedir(), filename);
-            final Source src = new StreamSource(inputFile);
             final Result res = new SAXResult(fop.getDefaultHandler());
 
             transformer.transform(src, res);
@@ -149,7 +152,7 @@ public class FopMojo extends AbstractMojo {
         }
     }
 
-    private String getRelativeOutputFilename(final String filename) {
+    private String getOutputFilename(final String filename) {
         return (filename.endsWith(".xml") ? filename.substring(0, filename.length() - 4) : filename)
                 + ".pdf";
     }
