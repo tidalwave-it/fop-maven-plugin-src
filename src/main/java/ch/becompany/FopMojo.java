@@ -89,6 +89,12 @@ public class FopMojo extends AbstractMojo {
      */
     private File userConfigFile;
 
+    /**
+     * FOP file name of the target file
+     * @parameter expression="${fop.outputFileName}"
+     */
+    private String outputFileName;
+
     public void execute() throws MojoExecutionException {
 
         if (this.userConfigFile != null) {
@@ -129,7 +135,11 @@ public class FopMojo extends AbstractMojo {
             foUserAgent.setTargetResolution(this.targetResolution);
         }
 
-        final File outputFile = new File(outputDirectory, getOutputFilename(filename));
+        if (outputFileName == null) {
+            outputFileName = getOutputFilename(filename);   
+        }
+        
+        final File outputFile = new File(outputDirectory, outputFileName);
         if (outputFile.createNewFile()) {
             getLog().debug("Output file created: " + outputFile);
         }
