@@ -18,7 +18,9 @@ package ch.becompany;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import javax.xml.parsers.SAXParserFactory;
@@ -140,7 +142,7 @@ public class FopMojo extends AbstractMojo {
             spf.setXIncludeAware(true);
             final XMLReader xr = spf.newSAXParser().getXMLReader();
             final File inputFile = new File(inputFiles.getBasedir(), filename);
-            final SAXSource src = new SAXSource(xr, new InputSource(new FileReader(inputFile)));
+            final SAXSource src = new SAXSource(xr, new InputSource(new InputStreamReader(new FileInputStream(inputFile), "UTF-8")));
 
             final TransformerFactory factory = TransformerFactory.newInstance();
             final Transformer transformer = factory.newTransformer(new StreamSource(xslFile));
