@@ -95,6 +95,24 @@ public class FopMojo extends AbstractMojo {
      * @parameter expression="${fop.outputFileName}"
      */
     private String outputFileName;
+
+    /**
+     * The title of the target PDF.
+     * @parameter expression="${fop.title}"
+     */
+    private String title;
+
+    /**
+     * The author of the target PDF.
+     * @parameter expression="${fop.author}"
+     */
+    private String author;
+
+    /**
+     * The subject of the target PDF.
+     * @parameter expression="${fop.subject}"
+     */
+    private String subject;
     
     /**
      * My Map.
@@ -144,7 +162,17 @@ public class FopMojo extends AbstractMojo {
         }
         if (this.rendererOptions != null) {
             foUserAgent.getRendererOptions().putAll(rendererOptions);
+        }                
+        if (this.title != null) {
+            foUserAgent.setTitle(title);
         }        
+        if (this.author != null) {
+            foUserAgent.setAuthor(author);
+        }        
+        if (this.subject != null) {
+            foUserAgent.setSubject(subject);
+        }        
+        
         if (outputFileName == null) {
             outputFileName = getOutputFilename(filename);   
         }
