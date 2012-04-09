@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
@@ -94,6 +95,13 @@ public class FopMojo extends AbstractMojo {
      * @parameter expression="${fop.outputFileName}"
      */
     private String outputFileName;
+    
+    /**
+     * My Map.
+     *
+     * @parameter expression="${fop.rendererOptions}"
+     */
+    private Map rendererOptions;    
 
     public void execute() throws MojoExecutionException {
 
@@ -134,7 +142,9 @@ public class FopMojo extends AbstractMojo {
         if (this.targetResolution != null) {
             foUserAgent.setTargetResolution(this.targetResolution);
         }
-
+        if (this.rendererOptions != null) {
+            foUserAgent.getRendererOptions().putAll(rendererOptions);
+        }        
         if (outputFileName == null) {
             outputFileName = getOutputFilename(filename);   
         }
