@@ -23,6 +23,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
@@ -121,6 +123,13 @@ public class FopMojo extends AbstractMojo {
      */
     private Map rendererOptions;    
 
+    /**
+     * XSLT transformation parameters.
+     *
+     * @parameter expression="${fop.xsltParameters}"
+     */
+    private Map xsltParameters;    
+
     public void execute() throws MojoExecutionException {
 
         if (this.userConfigFile != null) {
@@ -194,6 +203,12 @@ public class FopMojo extends AbstractMojo {
 
             final TransformerFactory factory = TransformerFactory.newInstance();
             final Transformer transformer = factory.newTransformer(new StreamSource(xslFile));
+            
+            for (final Entry<String, String> entry : ((Map<String, String>)xsltParameters).entrySet())
+              {
+                transformer.setParameter(entry.getKey(), entry.getValue());
+              }
+    
             final Result res = new SAXResult(fop.getDefaultHandler());
 
             transformer.transform(src, res);
