@@ -2,7 +2,7 @@
   
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>ch.becompany</groupId>
+  <groupId>it.tidalwave.fork.ch.becompany</groupId>
   <artifactId>fop-maven-plugin</artifactId>
   <name>FOP Maven PlugIn</name>
   <packaging>maven-plugin</packaging>
