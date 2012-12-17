@@ -12,7 +12,7 @@
     <artifactId>fop-maven-plugin</artifactId>
     <name>FOP Maven PlugIn</name>
     <packaging>maven-plugin</packaging>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
   
     <properties>
         <scm.repo.url>ssh://hg@bitbucket.org/tidalwave/fop-maven-plugin</scm.repo.url>
