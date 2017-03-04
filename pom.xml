@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>it.tidalwave.thesefoolishthings</groupId>
+        <groupId>it.tidalwave.superpom</groupId>
         <artifactId>superpom</artifactId>
         <version>4.3</version>
         <relativePath/>
@@ -16,15 +16,25 @@
     <version>1.1-SNAPSHOT</version>
 
     <properties>
-        <scm.repo.url>ssh:git@bitbucket.org:tidalwave/fop-maven-plugin-src.git</scm.repo.url>
-        <scm.repo.readonly.url>https://bitbucket.org:tidalwave/fop-maven-plugin-src</scm.repo.readonly.url>
-        <scm.repo.browse.url>https://bitbucket.org:tidalwave/fop-maven-plugin-src/src</scm.repo.browse.url>
-    </properties>
+        <scm.repo.url>git@bitbucket.org:tidalwave/fop-maven-plugin-src.git</scm.repo.url>
+        <scm.repo.readonly.url>https://bitbucket.org/tidalwave/fop-maven-plugin-src</scm.repo.readonly.url>
+        <scm.repo.browse.url>https://bitbucket.org/tidalwave/fop-maven-plugin-src/src</scm.repo.browse.url>
+
+        <tft.maven.requiredJdk>[1.8.0,)</tft.maven.requiredJdk>
+        <tft.javac.source>1.8</tft.javac.source>
+        <tft.javac.target>1.8</tft.javac.target>
+
+        <netbeans.hint.jdkPlatform>JDK_1.8.0</netbeans.hint.jdkPlatform>
+        <netbeans.hint.license>Tidalwave-ASF</netbeans.hint.license>
+        <netbeans.compile.on.save>all</netbeans.compile.on.save>
+
+        <tft.clirr.skip>true</tft.clirr.skip> <!-- Clirr is not compatible with JDK 8 -->
+     </properties>
 
     <!-- Repeated because of http://jira.codehaus.org/browse/SCM-442 -->
     <scm>
-        <connection>scm:hg:${scm.repo.readonly.url}</connection>
-        <developerConnection>scm:hg:${scm.repo.effective.url}</developerConnection>
+        <connection>scm:git:${scm.repo.readonly.url}</connection>
+        <developerConnection>scm:git:${scm.repo.effective.url}</developerConnection>
         <url>${scm.repo.browse.url}</url>
     </scm>
 
@@ -45,5 +55,17 @@
             <version>2.0.1</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
