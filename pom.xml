@@ -16,9 +16,9 @@
     <version>1.1-SNAPSHOT</version>
 
     <properties>
-        <scm.repo.url>ssh://hg@bitbucket.org/tidalwave/fop-maven-plugin</scm.repo.url>
-        <scm.repo.readonly.url>https://bitbucket.org/tidalwave/fop-maven-plugin</scm.repo.readonly.url>
-        <scm.repo.browse.url>https://bitbucket.org/tidalwave/fop-maven-plugin/src</scm.repo.browse.url>
+        <scm.repo.url>ssh:git@bitbucket.org:tidalwave/fop-maven-plugin-src.git</scm.repo.url>
+        <scm.repo.readonly.url>https://bitbucket.org:tidalwave/fop-maven-plugin-src</scm.repo.readonly.url>
+        <scm.repo.browse.url>https://bitbucket.org:tidalwave/fop-maven-plugin-src/src</scm.repo.browse.url>
     </properties>
 
     <!-- Repeated because of http://jira.codehaus.org/browse/SCM-442 -->
