@@ -1,4 +1,4 @@
-package ch.becompany;
+package it.tidalwave.maven.fop;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
